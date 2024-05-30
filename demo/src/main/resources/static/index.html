@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <script>
+        async function updateScore() {
+            const response = await fetch('/score');
+            const score = await response.json();
+            document.getElementById('score').innerText = score;
+        }
+
+        async function clickButton() {
+            const response = await fetch('/click', { method: 'POST' });
+            const score = await response.json();
+            document.getElementById('score').innerText = score;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            updateScore();
+        });
+    </script>
+</head>
+<body>
+    <h1>Clicker Game</h1>
+    <p>Score: <span id="score">0</span></p>
+    <button onclick="clickButton()">Click me!</button>
+</body>
+</html>
