@@ -23,6 +23,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    function enviarClic() {
+            fetch('/api/clicks/1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ click: true })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar la cantidad de clics recibidos del servidor
+                clicks = data.clicks;
+                render();
+            })
+            .catch(error => console.error('Error al enviar clic al servidor:', error));
+        }
+
     function render() {
         document.getElementById("contClicks").innerHTML = clicks;
     }
