@@ -15,14 +15,13 @@ public class Player {
     private int lives;
     private int score;
 
-    // Constructor sin argumentos
     public Player() {
     }
 
-    public Player(Long id, String name, int lifes, int score) {
+    public Player(Long id, String name, int lives, int score) {
         this.id = id;
         this.name = name;
-        this.lives = lifes;
+        this.lives = lives;
         this.score = score;
     }
 
@@ -46,8 +45,8 @@ public class Player {
         return lives;
     }
 
-    public void setLives(int lifes) {
-        this.lives = lifes;
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public int getScore() {

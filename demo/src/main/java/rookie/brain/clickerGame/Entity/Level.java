@@ -17,6 +17,9 @@ public class Level {
         this.name = name;
     }
 
+    public Level() {
+    }
+
     public String getName() {
         return name;
     }

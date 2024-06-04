@@ -1,116 +1,75 @@
 package rookie.brain.clickerGame.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rookie.brain.clickerGame.Entity.Level;
-import rookie.brain.clickerGame.Entity.Player;
-import rookie.brain.clickerGame.Entity.Ranking;
-import rookie.brain.clickerGame.Service.LevelService;
-import rookie.brain.clickerGame.Service.PlayerService;
-import rookie.brain.clickerGame.Service.RankingService;
-import rookie.brain.clickerGame.model.Game;
+import rookie.brain.clickerGame.Entity.Game;
+import rookie.brain.clickerGame.Exception.GameAlreadyExistsException;
+import rookie.brain.clickerGame.Exception.GameNotFoundException;
+import rookie.brain.clickerGame.Exception.LevelNotFoundException;
+import rookie.brain.clickerGame.Exception.PlayerNotFoundException;
+import rookie.brain.clickerGame.Service.GameService;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api")
+@Api(value = "Game Management System", description = "Operations pertaining to games in Game Management System")
 public class GameController {
 
-    private final Game game;
-
     @Autowired
-    private PlayerService playerService;
+    private GameService gameService;
 
-    @Autowired
-    private LevelService levelService;
-
-    @Autowired
-    private RankingService rankingService;
-
-    public GameController() {
-        this.game = new Game();
-    }
-
-
-    @GetMapping("/score/{playerId}")
-    public int getPlayerScore(@PathVariable Long playerId) {
-        Player player = playerService.getPlayerById(playerId);
-        return player != null ? player.getScore() : 0;
-    }
-
-    @PostMapping("/click/{playerId}")
-    public int click(@PathVariable Long playerId) {
-        Player player = playerService.getPlayerById(playerId);
-        if (player != null) {
-            int newScore = player.getScore() + 1; // Incrementar el score
-            playerService.updatePlayerScore(playerId, newScore);
-            return newScore;
+    @PostMapping("/games")
+    @ApiOperation(value = "Create a new game", response = Game.class)
+    public ResponseEntity<?> createGame(
+            @ApiParam(value = "Name of the player", required = true) @RequestParam String playerName,
+            @ApiParam(value = "ID of the level", required = true) @RequestParam Long levelId) {
+        try {
+            Game game = gameService.saveGame(playerName, levelId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(game);
+        } catch (PlayerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (LevelNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (GameAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-        return 0;
     }
 
-    // Player endpoints
-    @PostMapping("/players")
-    public Player createPlayer(@RequestBody Player player) {
-        return playerService.savePlayer(player);
+    @GetMapping("/games/{id}")
+    @ApiOperation(value = "Get a game by its ID", response = Game.class)
+    public ResponseEntity<?> getGameById(
+            @ApiParam(value = "ID of the game to retrieve", required = true) @PathVariable Long id) {
+        try {
+            Game game = gameService.getGameById(id);
+            return ResponseEntity.ok(game);
+        } catch (GameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    @GetMapping("/players")
-    public List<Player> getAllPlayers() {
-        return playerService.getAllPlayers();
+    @GetMapping("/games")
+    @ApiOperation(value = "Get all games", response = List.class)
+    public List<Game> getAllGames() {
+        return gameService.getAllGames();
     }
 
-    @GetMapping("/players/{id}")
-    public Player getPlayerById(@PathVariable Long id) {
-        return playerService.getPlayerById(id);
-    }
-
-    @DeleteMapping("/players/{id}")
-    public void deletePlayer(@PathVariable Long id) {
-        playerService.deletePlayer(id);
-    }
-
-    // Level endpoints
-    @PostMapping("/levels")
-    public Level createLevel(@RequestBody Level level) {
-        return levelService.saveLevel(level);
-    }
-
-    @GetMapping("/levels")
-    public List<Level> getAllLevels() {
-        return levelService.getAllLevels();
-    }
-
-    @GetMapping("/levels/{id}")
-    public Level getLevelById(@PathVariable Long id) {
-        return levelService.getLevelById(id);
-    }
-
-    @DeleteMapping("/levels/{id}")
-    public void deleteLevel(@PathVariable Long id) {
-        levelService.deleteLevel(id);
-    }
-
-    // Ranking endpoints
-    @PostMapping("/rankings")
-    public Ranking createRanking(@RequestBody Ranking ranking) {
-        return rankingService.saveRanking(ranking);
-    }
-
-    @GetMapping("/ranking")
-    public List<Player> getRanking() {
-        return playerService.getRanking();
-    }
-
-    @GetMapping("/rankings/{id}")
-    public Ranking getRankingById(@PathVariable Long id) {
-        return rankingService.getRankingById(id);
-    }
-
-    @DeleteMapping("/rankings/{id}")
-    public void deleteRanking(@PathVariable Long id) {
-        rankingService.deleteRanking(id);
+    @DeleteMapping("/games/{id}")
+    @ApiOperation(value = "Delete a game by its ID")
+    public ResponseEntity<?> deleteGame(
+            @ApiParam(value = "ID of the game to delete", required = true) @PathVariable Long id) {
+        try {
+            gameService.deleteGame(id);
+            return ResponseEntity.ok().build();
+        } catch (GameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

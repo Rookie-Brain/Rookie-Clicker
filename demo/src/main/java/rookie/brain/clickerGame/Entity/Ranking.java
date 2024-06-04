@@ -20,6 +20,9 @@ public class Ranking {
         this.scoreLevel = scoreLevel;
     }
 
+    public Ranking() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -43,5 +46,4 @@ public class Ranking {
     public void setScoreLevel(int scoreLevel) {
         this.scoreLevel = scoreLevel;
     }
-// Getters and setters
 }
