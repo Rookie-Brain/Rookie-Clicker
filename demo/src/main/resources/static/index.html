@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,15 +7,23 @@
     <title>Clicker Game</title>
     <script>
         async function updateScore() {
-            const response = await fetch('/score');
-            const score = await response.json();
-            document.getElementById('score').innerText = score;
+            try {
+                const response = await fetch('/api/score');
+                const score = await response.json();
+                document.getElementById('score').innerText = score;
+            } catch (error) {
+                console.error('Error fetching score:', error);
+            }
         }
 
         async function clickButton() {
-            const response = await fetch('/click', { method: 'POST' });
-            const score = await response.json();
-            document.getElementById('score').innerText = score;
+            try {
+                const response = await fetch('/api/click', { method: 'POST' });
+                const score = await response.json();
+                document.getElementById('score').innerText = score;
+            } catch (error) {
+                console.error('Error clicking button:', error);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -22,9 +31,52 @@
         });
     </script>
 </head>
+
 <body>
-    <h1>Clicker Game</h1>
-    <p>Score: <span id="score">0</span></p>
-    <button onclick="clickButton()">Click me!</button>
+<h1>Clicker Game</h1>
+<p>Score: <span id="score">0</span></p>
+<button onclick="clickButton()">Click me!</button>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mango clicker - El mejor clicker de la historia solo aquí!!!!!!</title>
+    <script src="funtionGame.js"></script>
+    <link rel="stylesheet" href="diseñoJuego.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body onload="temporizador();">
+    <header>
+        <div class="logo">LOGO</div>
+        <a href="index.html" class="boton-regresar">Volver al inicio</a> <!-- Botón para regresar al index -->
+    </header>
+
+    <main class="main">
+        <div class="puntuaciones">
+            <div class="contenedor">
+                <span class="descripcion">Mejor</span>
+                <span id="mejorClicks" class="datos">0</span>
+            </div>
+            <div class="contenedor">
+                <span class="descripcion">Tiempo</span>
+                <span id="temporizador" class="datos">10</span>
+            </div>
+            <div class="contenedor">
+                <span class="descripcion">Clicks</span>
+                <span id="contClicks" class="datos">0</span>
+            </div>
+        </div>
+        <div class="Codigos_e_Imagen">
+            <img src="Mango.jpg" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+            <div id="codigoContenedor">
+                <p id="codigos">Código</p>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
