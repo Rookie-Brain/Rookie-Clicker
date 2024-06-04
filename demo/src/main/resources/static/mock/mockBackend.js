@@ -1,4 +1,35 @@
-// Inicializar el almacenamiento en localStorage si no existe
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.pathname.endsWith("game.html")) {
+        const nameInput = document.getElementById('nickname');
+        nameInput.addEventListener('change', function() {
+            const name = this.value;
+            const player = { id: 0, lives: 2, name: name, score: 0 };  // Crear objeto Player con todas las propiedades necesarias
+
+            fetch('http://localhost:8080/api/players', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(player)  // Enviar objeto Player
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(`Player created with Name: ${data.name}, Score: ${data.score}, Lives: ${data.lives}, ID: ${data.id}`);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        });
+    }
+});
+
+
+/* Inicializar el almacenamiento en localStorage si no existe
 if (!localStorage.getItem('mockGame')) {
     localStorage.setItem('mockGame', JSON.stringify({
         lives: 2,
@@ -19,8 +50,10 @@ const setMockGame = (game) => localStorage.setItem('mockGame', JSON.stringify(ga
 const getMockUsers = () => JSON.parse(localStorage.getItem('mockUsers'));
 const setMockUsers = (users) => localStorage.setItem('mockUsers', JSON.stringify(users));
 
-globalThis.fetch = (url, options) => {
-    console.log(`Fetching: ${url}`, options);
+const realFetch = globalThis.fetch;
+
+globalThis.mockFetch = (url, options) => {
+    console.log(`Mock Fetching: ${url}`, options);
 
     const mockGame = getMockGame();
     const mockUsers = getMockUsers();
@@ -39,6 +72,8 @@ globalThis.fetch = (url, options) => {
         return Promise.resolve({
             json: () => Promise.resolve({ nickname, score: mockUsers[nickname].score })
         });
+    } else if (url === 'http://localhost:8080/api/players' && options.method === 'POST') {
+        return realFetch(url, options);
     } else if (url === '/api/gameTest/lives' && options.method === 'POST') {
         const change = JSON.parse(options.body).change;
         mockGame.lives += change;
@@ -98,4 +133,36 @@ globalThis.fetch = (url, options) => {
             json: () => Promise.resolve(ranking)
         });
     }
+
+    return Promise.reject(new Error('Unknown URL or Method'));
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.pathname.endsWith("game.html")) {
+        const nameInput = document.getElementById('nickname');
+        nameInput.addEventListener('change', function() {
+            const name = this.value;
+            const player = { id: 0, lives: 2, name: name, score: 0 };  // Crear objeto Player con todas las propiedades necesarias
+
+            realFetch('http://localhost:8080/api/players', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(player)  // Enviar objeto Player
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(`Player created with Name: ${data.name}, Score: ${data.score}, Lives: ${data.lives}, ID: ${data.id}`);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        });
+    }
+});*/
