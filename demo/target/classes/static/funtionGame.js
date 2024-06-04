@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var clicks = 0;
     var clicksNecesarios = 1;
     const codigosArrays = ["codigo1", "codigo2", "codigo3"];
-    var tiempo = 25;
+    var tiempo = 25
+    document.getElementById("temporizador").innerHTML = tiempo;
     var tempo = tiempo;
     var fps = 60;
 
@@ -15,6 +16,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (tempo > 0) {
             clicks++;
             render();
+
+            if (clicks==1){
+            temporizador();
+            }
         }
     }
 
@@ -23,25 +28,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function temporizador() {
-        var tempElement = document.getElementById("temporizador");
-        if (tempElement) {
-            tempElement.innerHTML = tempo;
-            if (tempo <= 0) {
-                alert('Se acabo el tiempo');
-            
-            } 
-            else(tempo > 0)
-            {
-                render();
-                
-                if (clicks > 0)
-                {
-                    tempo--;
-                    setTimeout(temporizador, 1000);
-                }
-            }
-        }
-    }
+       var tempElement = document.getElementById("temporizador");
+           if (tempElement) {
+               var tiempo = parseInt(tempElement.innerHTML);
+               if (!isNaN(tiempo)) {
+                   if (tiempo <= 0) {
+                       alert('Se acabó el tiempo');
+                   } else {
+                       tiempo--;
+                       tempElement.innerHTML = tiempo;
+                       setTimeout(temporizador, 1000);
+               }
+               }
+               }
 
     function mostrarCodigoSiEsNecesario() 
     {
@@ -52,7 +51,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    temporizador();
 
     const intervalo = setInterval(function () {
         if (clicks >= clicksNecesarios && tempo == 0) {
@@ -61,3 +59,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }, 1000 / fps);
 });
+

@@ -7,6 +7,7 @@ import rookie.brain.clickerGame.Repository.LevelRepository;
 import rookie.brain.clickerGame.Utils.ExceptionConstants;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LevelService {
@@ -18,6 +19,10 @@ public class LevelService {
     }
 
     public Level saveLevel(Level level) {
+        Optional<Level> existingLevel = Optional.ofNullable(levelRepository.findByName(level.getName()));
+        if (existingLevel.isPresent()) {
+            throw new LevelAlreadyExistsException(String.format(ExceptionConstants.LEVEL_ALREADY_EXISTS, level.getName()));
+        }
         return levelRepository.save(level);
     }
 

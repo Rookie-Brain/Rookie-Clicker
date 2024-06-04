@@ -8,4 +8,5 @@ public class ExceptionConstants {
     public static final String GAME_ALREADY_EXISTS = "Game already exists for player: %s and level: %d";
 
     public static final String GAME_NOT_FOUND = "Game with ID %d not found";
+    public static final String LEVEL_ALREADY_EXISTS = "Level with name '%s' already exists";
 }

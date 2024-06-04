@@ -4,8 +4,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rookie.brain.clickerGame.Entity.Level;
+import rookie.brain.clickerGame.Service.LevelAlreadyExistsException;
 import rookie.brain.clickerGame.Service.LevelService;
 
 import java.util.List;
@@ -19,10 +22,15 @@ public class LevelController {
 
     @PostMapping("/levels")
     @ApiOperation(value = "Create a new level", response = Level.class)
-    public Level createLevel(
+    public ResponseEntity<?> createLevel(
             @ApiParam(value = "Level object to be created", required = true)
             @RequestBody Level level) {
-        return levelService.saveLevel(level);
+        try {
+            Level createdLevel = levelService.saveLevel(level);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLevel);
+        } catch (LevelAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/levels")
