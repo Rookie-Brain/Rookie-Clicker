@@ -1,0 +1,14 @@
+
+š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$a7c07da9-a06d-4466-bec6-f1409afc6c87
+~
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞJ$eb2b8f1f-6c51-4721-a193-531e09fbc6c7
+{
+java:S1874"3Remove this use of "description"; it is deprecated.(•ĞØøÿÿÿÿ8ò¤‰šş1J$f07c2ac6-a4e8-4848-b104-5f9865e1a15d
+b
+java:S1452"&Remove usage of generic wildcard type.(Î÷“èJ$8a6fd4f3-1d67-4257-b634-0cdce4f2c384
+‡
+java:S2147'"DCombine this catch with the one at line 37, which has the same body.(å²åŠ8ô¤‰šş1J$2996850f-293b-4b2f-b0bc-2d67856643f4
+g
+java:S14520"&Remove usage of generic wildcard type.(ì®ÕäÿÿÿÿÿJ$025b91e8-7c2c-41cb-9e76-302b4510118a
+b
+java:S1452B"&Remove usage of generic wildcard type.(èá÷üJ$7dd996bc-d123-4eee-b79e-afba3bf29d21

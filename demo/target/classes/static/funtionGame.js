@@ -12,52 +12,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
         clickerImage.addEventListener('click', clic);
     }
 
-    function clic() {
+    function clic(playerId=1) {
         if (tempo > 0) {
             clicks++;
-            guardarClic(playerId); // Llama a la función para guardar el clic
-
+            guardarClic(playerId=1); // Llama a la función para guardar el clic con el playerId
             render();
 
-            if (clicks==1){
-            temporizador();
+            if (clicks == 1) {
+                temporizador();
             }
         }
     }
 
     function guardarClic(playerId=1) {
-        fetch(`/api/click/${playerId}`, {
-            method: 'POST'
-        })
-        .then(response => response.json())
-        .then(score => {
-            console.log(`El score actualizado del jugador es: ${score}`);
-            // Realiza cualquier acción adicional necesaria con el nuevo score
-        })
-        .catch(error => {
-            console.error('Error al guardar el clic:', error);
-        });
+        fetch(`/api/click/${playerId=1}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(score => {
+                console.log(`El score actualizado del jugador es: ${score}`);
+            })
+            .catch(error => {
+                console.error('Error al guardar el clic:', error);
+            });
     }
 
     function render() {
         document.getElementById("contClicks").innerHTML = clicks;
     }
 
-   function temporizador() {
-       var tempElement = document.getElementById("temporizador");
-       if (tempElement) {
-           if (tempo <= 0) {
-               alert('Se acabó el tiempo');
-           } else {
-               tempo--;
-               tempElement.innerHTML = tempo; // Actualizar el temporizador en la interfaz de usuario
-               setTimeout(temporizador, 1000);
-           }
-       }
-   }
+    function temporizador() {
+        var tempElement = document.getElementById("temporizador");
+        if (tempElement) {
+            if (tempo <= 0) {
+                alert('Se acabó el tiempo');
+            } else {
+                tempElement.innerHTML = tempo;
+                tempo--;
+                setTimeout(temporizador, 1000);
+            }
+        }
+    }
 
-    function mostrarCodigoSiEsNecesario() 
-    {
+    function mostrarCodigoSiEsNecesario() {
         if (clicks >= clicksNecesarios && tempo == 0) {
             const elementoAleatorio = codigosArrays[Math.floor(Math.random() * codigosArrays.length)];
             document.getElementById("codigos").innerHTML = elementoAleatorio;

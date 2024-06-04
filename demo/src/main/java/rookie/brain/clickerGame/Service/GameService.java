@@ -32,7 +32,7 @@ public class GameService {
 
     public Game saveGame(String playerName, Long levelId) {
         Player player = playerRepository.findByName(playerName);
-        if (player == GlobalConstants.NULL_PLAYER) {
+        if (player == null) {
             throw new PlayerNotFoundException(String.format(ExceptionConstants.PLAYER_NOT_FOUND, playerName));
         }
 

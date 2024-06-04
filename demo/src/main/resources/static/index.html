@@ -1,82 +1,47 @@
-<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
-    <script>
-        async function updateScore() {
-            try {
-                const response = await fetch('/api/score');
-                const score = await response.json();
-                document.getElementById('score').innerText = score;
-            } catch (error) {
-                console.error('Error fetching score:', error);
-            }
-        }
-
-        async function clickButton() {
-            try {
-                const response = await fetch('/api/click', { method: 'POST' });
-                const score = await response.json();
-                document.getElementById('score').innerText = score;
-            } catch (error) {
-                console.error('Error clicking button:', error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            updateScore();
-        });
-    </script>
-</head>
-
-<body>
-<h1>Clicker Game</h1>
-<p>Score: <span id="score">0</span></p>
-<button onclick="clickButton()">Click me!</button>
-</body>
-</html>
--->
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mango clicker - El mejor clicker de la historia solo aquí!!!!!!</title>
-    <script src="funtionGame.js"></script>
-    <link rel="stylesheet" href="diseñoJuego.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Inicio</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
-        <div class="logo">LOGO</div>
-        <a href="index.html" class="boton-regresar">Volver al inicio</a> <!-- Botón para regresar al index -->
+        <h1>Rockie-Clicker</h1>
     </header>
 
-    <main class="main">
-        <div class="puntuaciones">
-            <div class="contenedor">
-                <span class="descripcion">Mejor</span>
-                <span id="mejorClicks" class="datos">0</span>
+    <div class="container text-center mt-5">
+        <h1>Bienvenido</h1>
+        <div class="d-flex flex-wrap justify-content-center mt-4">
+            <div class="card m-2" style="width: 18rem;">
+                <img src="img/rock-rookie.jpg" class="card-img-top" alt="Juego">
+                <div class="card-body">
+                    <h5 class="card-title">Ir al Juego</h5>
+                    <p class="card-text">Juega y gestiona tus niveles y puntajes.</p>
+                    <a href="game.html" class="btn btn-primary">Jugar</a>
+                </div>
             </div>
-            <div class="contenedor">
-                <span class="descripcion">Tiempo</span>
-                <span id="temporizador" class="datos"></span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks </span>
-                <span id="contClicks" class="datos">0 </span>
+            <div class="card m-2" style="width: 18rem;">
+                <img src="img/img-ranking.webp" class="card-img-top" alt="Ranking">
+                <div class="card-body">
+                    <h5 class="card-title">Ver Ranking</h5>
+                    <p class="card-text">Consulta el ranking de los mejores puntajes.</p>
+                    <a href="/ranking.html" class="btn btn-primary">Ranking</a>
+                </div>
             </div>
         </div>
-        <div class="Codigos_e_Imagen">
-            <img src="Mango.jpg" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
-            <div id="codigoContenedor">
-                <p id="codigos">Código</p>
-            </div>
-        </div>
-    </main>
+    </div>
+
+    <footer>
+        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+    </footer>
+
+    <script src="mock/mockBackend.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
+
+
+

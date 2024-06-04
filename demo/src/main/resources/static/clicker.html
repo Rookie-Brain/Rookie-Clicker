@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/clicker.js"></script>
+</head>
+<body>
+    <header>
+        <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
+        <h1>Rockie-Clicker</h1>
+    </header>
+
+    <div class="container mt-5">
+        <div class="puntuaciones">
+            <div class="contenedor">
+                <span class="descripcion">Tiempo</span>
+                <span id="temporizador" class="datos">0</span>
+            </div>
+            <div class="contenedor">
+                <span class="descripcion">Clicks</span>
+                <span id="contClicks" class="datos">0</span>
+            </div>
+        </div>
+        <div class="Codigos_e_Imagen">
+            <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+        </div>
+        <div class="vidas-y-clicks">
+            <div class="contenedor">
+                <span class="descripcion">Vidas restantes</span>
+                <span id="vidas-restantes" class="datos">0</span>
+            </div>
+            <div class="contenedor">
+                <span class="descripcion">Clicks necesarios</span>
+                <span id="clicks-necesarios" class="datos">0</span>
+            </div>
+        </div>
+        <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
+    </div>
+
+    <footer>
+        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+    </footer>
+    <script src="mock/mockBackend.js"></script>
+</body>
+</html>
+
+
