@@ -2,6 +2,7 @@ package rookie.brain.clickerGame.Service;
 
 import org.springframework.stereotype.Service;
 import rookie.brain.clickerGame.Entity.Level;
+import rookie.brain.clickerGame.Exception.LevelAlreadyExistsException;
 import rookie.brain.clickerGame.Exception.LevelNotFoundException;
 import rookie.brain.clickerGame.Repository.LevelRepository;
 import rookie.brain.clickerGame.Utils.ExceptionConstants;

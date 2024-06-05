@@ -37,10 +37,10 @@ public class GameService {
         }
 
         Level level = levelRepository.findById(levelId)
-                .orElseThrow(() -> new LevelNotFoundException(String.format(ExceptionConstants.LEVEL_NOT_FOUND, levelId)));
+                .orElseThrow(() -> new LevelNotFoundException(String.format(ExceptionConstants.LEVEL_NOT_FOUND, levelId.toString())));
 
         if (gameRepository.existsByPlayerNameAndLevelId(playerName, levelId)) {
-            throw new GameAlreadyExistsException(String.format(ExceptionConstants.GAME_ALREADY_EXISTS, playerName, levelId));
+            throw new GameAlreadyExistsException(String.format(ExceptionConstants.GAME_ALREADY_EXISTS, playerName, levelId.toString()));
         }
 
         Game game = new Game(player, level);

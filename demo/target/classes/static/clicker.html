@@ -6,46 +6,115 @@
     <title>Clicker Game</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/clicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <header>
-        <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
-        <h1>Rockie-Clicker</h1>
-    </header>
+<header>
+    <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
+    <h1>Rockie-Clicker</h1>
+</header>
 
-    <div class="container mt-5">
-        <div class="puntuaciones">
-            <div class="contenedor">
-                <span class="descripcion">Tiempo</span>
-                <span id="temporizador" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks</span>
-                <span id="contClicks" class="datos">0</span>
-            </div>
+<div class="container mt-5">
+    <div class="puntuaciones">
+        <div class="contenedor">
+            <span class="descripcion">Tiempo</span>
+            <span id="temporizador" class="datos">0</span>
         </div>
-        <div class="Codigos_e_Imagen">
-            <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+        <div class="contenedor">
+            <span class="descripcion">Clicks</span>
+            <span id="contClicks" class="datos">0</span>
         </div>
-        <div class="vidas-y-clicks">
-            <div class="contenedor">
-                <span class="descripcion">Vidas restantes</span>
-                <span id="vidas-restantes" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks necesarios</span>
-                <span id="clicks-necesarios" class="datos">0</span>
-            </div>
-        </div>
-        <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
     </div>
+    <div class="Codigos_e_Imagen">
+        <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+    </div>
+    <div class="vidas-y-clicks">
+        <div class="contenedor">
+            <span class="descripcion">Vidas restantes</span>
+            <span id="vidas-restantes" class="datos">0</span>
+        </div>
+        <div class="contenedor">
+            <span class="descripcion">Clicks necesarios</span>
+            <span id="clicks-necesarios" class="datos">0</span>
+        </div>
+    </div>
+    <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
+</div>
 
-    <footer>
-        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
-    </footer>
-    <script src="mock/mockBackend.js"></script>
+<footer>
+    <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+
+
+    const playerId = 1;
+
+    if (playerId === 0) { // Verifica si playerId es 0
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const clickerImage = document.getElementById('clicker-image');
+
+    clickerImage.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
+            updateScore(response.data);
+        } catch (error) {
+            console.error('Error al incrementar la puntuación:', error);
+        }
+    });
+
+});
+
+function updateScore(score) {
+    const scoreElement = document.getElementById('contClicks');
+    scoreElement.textContent = score;
+}
+
+    async function loadLevel(levelId) {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
+        const level = response.data;
+        updateLevelData(level);
+    } catch (error) {
+        console.error('Error al cargar el nivel:', error);
+        alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
+    }
+}
+
+function updateLevelData(level) {
+    const vidasRestantesElement = document.getElementById('vidas-restantes');
+    const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+    const temporizadorElement = document.getElementById('temporizador');
+
+    if (level) { // Verifica si el nivel no es undefined
+        vidasRestantesElement.textContent = level.lives;
+        clicksNecesariosElement.textContent = level.nextlevelscore;
+        temporizadorElement.textContent = level.seconds; // Suponiendo que el valor del temporizador está en la propiedad "seconds" del objeto level
+    } else {
+        console.error('No se encontró el nivel.');
+        // Puedes manejar este caso según tus necesidades, por ejemplo, mostrando un mensaje de error o estableciendo los valores predeterminados.
+    }
+}
+
+// Llama a loadLevel con el ID del nivel que deseas cargar
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadLevel(1); // Carga el nivel con ID 1 al cargar la página
+});
+
+
+
+
+
+
+
+
+
+</script>
 </body>
 </html>
-
-

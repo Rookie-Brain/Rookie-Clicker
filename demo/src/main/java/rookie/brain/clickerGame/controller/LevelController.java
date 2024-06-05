@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rookie.brain.clickerGame.Entity.Level;
-import rookie.brain.clickerGame.Service.LevelAlreadyExistsException;
+import rookie.brain.clickerGame.Exception.LevelAlreadyExistsException;
 import rookie.brain.clickerGame.Service.LevelService;
 
 import java.util.List;

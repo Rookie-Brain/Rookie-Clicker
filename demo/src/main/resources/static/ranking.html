@@ -6,33 +6,60 @@
     <title>Ranking</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/ranking.js"></script>
+    <!-- Elimina la referencia si no existe ranking.js -->
+    <!-- <script src="js/ranking.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <header>
-        <a href="index.html" class="btn btn-light" id="back-button">Regresar</a>
-        <h1>Rockie-Clicker - Ranking</h1>
-    </header>
+<header>
+    <a href="index.html" class="btn btn-light" id="back-button">Regresar</a>
+    <h1>Rockie-Clicker - Ranking</h1>
+</header>
 
-    <div class="container mt-5">
-        <table class="table table-striped text-center">
-            <thead>
-                <tr>
-                    <th>Posición</th>
-                    <th>Nombre</th>
-                    <th>Puntuación Más Alta</th>
-                </tr>
-            </thead>
-            <tbody id="ranking-table">
-                <!-- Ranking datos aqui -->
-            </tbody>
-        </table>
-    </div>
+<div class="container mt-5">
+    <table class="table table-striped text-center">
+        <thead>
+        <tr>
+            <th>Posición</th>
+            <th>Nombre</th>
+            <th>Puntuación Más Alta</th>
+        </tr>
+        </thead>
+        <tbody id="ranking-table">
+        <!-- Ranking datos aqui -->
+        </tbody>
+    </table>
+</div>
 
-    <footer>
-        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
-    </footer>
-    <script src="mock/mockBackend.js"></script>
+<footer>
+    <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await axios.get('http://localhost:8080/api/ranking');
+            const rankingData = response.data;
+            displayRanking(rankingData);
+        } catch (error) {
+            console.error('Error al cargar el ranking:', error);
+            alert('Error al cargar el ranking: ' + (error.response ? error.response.data : error.message));
+        }
+    });
+
+    function displayRanking(rankingData) {
+        const rankingTable = document.getElementById('ranking-table');
+        rankingTable.innerHTML = ''; // Limpiar datos anteriores
+
+        rankingData.forEach((player, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${player.name}</td>
+                <td>${player.score}</td> <!-- Asegúrate de que el campo sea 'score' -->
+            `;
+            rankingTable.appendChild(row);
+        });
+    }
+</script>
 </body>
 </html>
-

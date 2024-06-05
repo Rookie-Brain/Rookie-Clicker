@@ -11,11 +11,16 @@ public class Level {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    private int nextlevelscore;
+    private int seconds;
 
-    public Level(Long id, String name) {
+    public Level(Long id, String name, int nextlevelscore, int seconds) {
         this.id = id;
         this.name = name;
+        this.nextlevelscore = nextlevelscore;
+        this.seconds = seconds;
     }
+
 
     public Level() {
     }
@@ -34,5 +39,21 @@ public class Level {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getNextlevelscore() {
+        return nextlevelscore;
+    }
+
+    public void setNextlevelscore(int nextlevelscore) {
+        this.nextlevelscore = nextlevelscore;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 }
