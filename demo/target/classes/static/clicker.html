@@ -6,46 +6,68 @@
     <title>Clicker Game</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/clicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <header>
-        <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
-        <h1>Rockie-Clicker</h1>
-    </header>
+<header>
+    <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
+    <h1>Rockie-Clicker</h1>
+</header>
 
-    <div class="container mt-5">
-        <div class="puntuaciones">
-            <div class="contenedor">
-                <span class="descripcion">Tiempo</span>
-                <span id="temporizador" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks</span>
-                <span id="contClicks" class="datos">0</span>
-            </div>
+<div class="container mt-5">
+    <div class="puntuaciones">
+        <div class="contenedor">
+            <span class="descripcion">Tiempo</span>
+            <span id="temporizador" class="datos">0</span>
         </div>
-        <div class="Codigos_e_Imagen">
-            <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+        <div class="contenedor">
+            <span class="descripcion">Clicks</span>
+            <span id="contClicks" class="datos">0</span>
         </div>
-        <div class="vidas-y-clicks">
-            <div class="contenedor">
-                <span class="descripcion">Vidas restantes</span>
-                <span id="vidas-restantes" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks necesarios</span>
-                <span id="clicks-necesarios" class="datos">0</span>
-            </div>
-        </div>
-        <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
     </div>
+    <div class="Codigos_e_Imagen">
+        <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+    </div>
+    <div class="vidas-y-clicks">
+        <div class="contenedor">
+            <span class="descripcion">Vidas restantes</span>
+            <span id="vidas-restantes" class="datos">0</span>
+        </div>
+        <div class="contenedor">
+            <span class="descripcion">Clicks necesarios</span>
+            <span id="clicks-necesarios" class="datos">0</span>
+        </div>
+    </div>
+    <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
+</div>
 
-    <footer>
-        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
-    </footer>
-    <script src="mock/mockBackend.js"></script>
+<footer>
+    <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const playerId = localStorage.getItem('currentPlayerId');
+    if (playerId) {
+        // Si hay un ID de jugador almacenado, cargar las estadísticas del jugador
+        getPlayerStats(playerId);
+    } else {
+        // Si no hay un ID de jugador almacenado, redirigir a game.html
+        window.location.href = 'game.html';
+    }
+});
+
+async function getPlayerStats(playerId) {
+    try {
+        const response = await axios.get(`/api/players/${playerId}`);
+        updatePlayerStats(response.data);
+    } catch (error) {
+        console.error('Error al obtener las estadísticas del jugador:', error);
+    }
+}
+
+
+});
+</script>
 </body>
 </html>
-
-

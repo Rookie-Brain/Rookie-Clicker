@@ -6,46 +6,112 @@
     <title>Clicker Game</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/clicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <header>
-        <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
-        <h1>Rockie-Clicker</h1>
-    </header>
+<header>
+    <a href="game.html" class="btn btn-light" id="back-button">Regresar</a>
+    <h1>Rockie-Clicker</h1>
+</header>
 
-    <div class="container mt-5">
-        <div class="puntuaciones">
-            <div class="contenedor">
-                <span class="descripcion">Tiempo</span>
-                <span id="temporizador" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks</span>
-                <span id="contClicks" class="datos">0</span>
-            </div>
+<div class="container mt-5">
+    <div class="puntuaciones">
+        <div class="contenedor">
+            <span class="descripcion">Tiempo</span>
+            <span id="temporizador" class="datos">0</span>
         </div>
-        <div class="Codigos_e_Imagen">
-            <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+        <div class="contenedor">
+            <span class="descripcion">Clicks</span>
+            <span id="contClicks" class="datos">0</span>
         </div>
-        <div class="vidas-y-clicks">
-            <div class="contenedor">
-                <span class="descripcion">Vidas restantes</span>
-                <span id="vidas-restantes" class="datos">0</span>
-            </div>
-            <div class="contenedor">
-                <span class="descripcion">Clicks necesarios</span>
-                <span id="clicks-necesarios" class="datos">0</span>
-            </div>
-        </div>
-        <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
     </div>
+    <div class="Codigos_e_Imagen">
+        <img src="img/rock-rookie-sinFondo.png" alt="Mango para clickear" id="clicker-image" width="300" height="300"/>
+    </div>
+    <div class="vidas-y-clicks">
+        <div class="contenedor">
+            <span class="descripcion">Vidas restantes</span>
+            <span id="vidas-restantes" class="datos">0</span>
+        </div>
+        <div class="contenedor">
+            <span class="descripcion">Clicks necesarios</span>
+            <span id="clicks-necesarios" class="datos">0</span>
+        </div>
+    </div>
+    <button class="btn btn-warning mt-3" id="revive-button" style="display:none;">Revivir</button>
+</div>
 
-    <footer>
-        <p>2024 Rockie-Clicker. Equipo Gomita.</p>
-    </footer>
-    <script src="mock/mockBackend.js"></script>
+<footer>
+    <p>2024 Rockie-Clicker. Equipo Gomita.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+     // Recuperar el playerId del almacenamiento local
+     const playerId = localStorage.getItem('currentPlayerId');
+
+     if (!playerId) {
+         // Redirigir de vuelta a la página de creación de jugador si no se encuentra el playerId en el almacenamiento local
+         window.location.href = 'index.html';
+         return;
+     }
+
+     if (currentPlayerId) {
+         localStorage.setItem('currentPlayerId', currentPlayerId);
+         getPlayerStats(currentPlayerId);
+     } else {
+         window.location.href = 'game.html';
+     }
+
+     const clickerImage = document.getElementById('clicker-image');
+
+     clickerImage.addEventListener('click', async (event) => {
+         event.preventDefault();
+
+         try {
+             const response = await axios.post(`/api/click/${currentPlayerId}`);
+             updateScore(response.data);
+         } catch (error) {
+             console.error('Error al incrementar la puntuación:', error);
+         }
+     });
+ });
+
+         // Obtener las estadísticas del jugador y actualizar la interfaz de usuario
+         await getPlayerStats(playerId);
+     });
+
+     // Función para obtener las estadísticas del jugador
+     async function getPlayerStats(playerId) {
+         try {
+             // Realizar una solicitud GET al endpoint /api/players/{id} para obtener las estadísticas del jugador
+             const response = await axios.get(`/api/players/${playerId}`);
+             // Actualizar las estadísticas en la interfaz de usuario
+             updatePlayerStats(response.data);
+         } catch (error) {
+             console.error('Error al obtener las estadísticas del jugador:', error);
+         }
+     }
+
+     // Función para actualizar las estadísticas del jugador en la interfaz de usuario
+     function updatePlayerStats(playerStats) {
+         const { tiempo, clicks, vidasRestantes, clicksNecesarios } = playerStats;
+         const tiempoElement = document.getElementById('temporizador');
+         const clicksElement = document.getElementById('contClicks');
+         const vidasElement = document.getElementById('vidas-restantes');
+         const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+
+         tiempoElement.textContent = tiempo;
+         clicksElement.textContent = clicks;
+         vidasElement.textContent = vidasRestantes;
+         clicksNecesariosElement.textContent = clicksNecesarios;
+     }
+
+     // Función para actualizar la puntuación en la interfaz de usuario
+     function updateScore(score) {
+         const scoreElement = document.getElementById('contClicks');
+         scoreElement.textContent = score;
+     }
+</script>
 </body>
 </html>
-
-

@@ -1,24 +1,3 @@
-/* Inicializar el almacenamiento en localStorage si no existe
-if (!localStorage.getItem('mockGame')) {
-    localStorage.setItem('mockGame', JSON.stringify({
-        lives: 2,
-        niveles: [
-            { lives: 2, score: 100, time: 60 },
-            { lives: 3, score: 150, time: 90 },
-        ]
-    }));
-}
-
-if (!localStorage.getItem('mockUsers')) {
-    localStorage.setItem('mockUsers', JSON.stringify({}));
-}
-
-const getMockGame = () => JSON.parse(localStorage.getItem('mockGame'));
-const setMockGame = (game) => localStorage.setItem('mockGame', JSON.stringify(game));
-
-const getMockUsers = () => JSON.parse(localStorage.getItem('mockUsers'));
-const setMockUsers = (users) => localStorage.setItem('mockUsers', JSON.stringify(users));
-
 document.addEventListener("DOMContentLoaded", function() {
     if (window.location.pathname.endsWith("game.html")) {
         const nameInput = document.getElementById('nickname');
@@ -37,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (!response.ok) {
                     return response.text().then(text => { throw new Error(text); });
                 }
-                return response.json();  // Convertir la respuesta a JSON si es correcta
+                return response.json();
             })
             .then(data => {
                 console.log(`Player created with Name: ${data.name}, Score: ${data.score}, Lives: ${data.lives}, ID: ${data.id}`);
@@ -50,30 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/ Inicializar el almacenamiento en localStorage si no existe
-
-
-
-
-
-
+/* Inicializar el almacenamiento en localStorage si no existe
 if (!localStorage.getItem('mockGame')) {
     localStorage.setItem('mockGame', JSON.stringify({
         lives: 2,
@@ -209,4 +165,4 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     }
-});
+});*/
