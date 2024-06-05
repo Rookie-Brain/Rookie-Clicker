@@ -45,72 +45,99 @@
     <p>2024 Rockie-Clicker. Equipo Gomita.</p>
 </footer>
 
+<script>
+    let timerInterval;
+    let remainingTime;
+    let clicksCount = 0;
+    let clicksNeeded;
 
-    <script>
-       document.addEventListener('DOMContentLoaded', async function() {
-           const playerId = localStorage.getItem('currentPlayerId');
-           const levelId = localStorage.getItem('currentLevelId');
+    document.addEventListener('DOMContentLoaded', async function() {
+        const playerId = localStorage.getItem('currentPlayerId');
+        const levelId = localStorage.getItem('currentLevelId');
 
-           if (!playerId || !levelId) {
-               window.location.href = 'index.html';
-               return;
-           }
+        if (!playerId || !levelId) {
+            window.location.href = 'index.html';
+            return;
+        }
 
-           const clickerImage = document.getElementById('clicker-image');
+        const clickerImage = document.getElementById('clicker-image');
 
-           clickerImage.addEventListener('click', async (event) => {
-               event.preventDefault();
+        clickerImage.addEventListener('click', async (event) => {
+            event.preventDefault();
+            clicksCount++;
+            updateScore(clicksCount);
+            checkLevelCompletion();
 
-               try {
-                   const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
-                   updateScore(response.data);
-               } catch (error) {
-                   console.error('Error al incrementar la puntuación:', error);
-               }
-           });
+            try {
+                const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
+                updateScore(response.data);
+            } catch (error) {
+                console.error('Error al incrementar la puntuación:', error);
+            }
+        });
 
-           await loadLevel(levelId);
-       });
+        await loadLevel(levelId);
+        startTimer();
+    });
 
-       function updateScore(score) {
-           const scoreElement = document.getElementById('contClicks');
-           scoreElement.textContent = score;
-       }
+    function updateScore(score) {
+        const scoreElement = document.getElementById('contClicks');
+        scoreElement.textContent = score;
+    }
 
-       async function loadLevel(levelId) {
-           try {
-               const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
-               const level = response.data;
-               updateLevelData(level);
-           } catch (error) {
-               console.error('Error al cargar el nivel:', error);
-               alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
-           }
-       }
+    async function loadLevel(levelId) {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
+            const level = response.data;
+            updateLevelData(level);
+        } catch (error) {
+            console.error('Error al cargar el nivel:', error);
+            alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
+        }
+    }
 
-       function updateLevelData(level) {
-           const vidasRestantesElement = document.getElementById('vidas-restantes');
-           const clicksNecesariosElement = document.getElementById('clicks-necesarios');
-           const temporizadorElement = document.getElementById('temporizador');
+    function updateLevelData(level) {
+        const vidasRestantesElement = document.getElementById('vidas-restantes');
+        const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+        const temporizadorElement = document.getElementById('temporizador');
 
-           if (level) {
-               vidasRestantesElement.textContent = level.lives;
-               clicksNecesariosElement.textContent = level.nextlevelscore;
-               temporizadorElement.textContent = level.seconds;
-           } else {
-               console.error('No se encontró el nivel.');
-           }
-       }
+        if (level) {
+            vidasRestantesElement.textContent = level.lives;
+            clicksNecesariosElement.textContent = level.nextlevelscore;
+            temporizadorElement.textContent = level.seconds;
+            remainingTime = level.seconds;
+            clicksNeeded = level.nextlevelscore;
+        } else {
+            console.error('No se encontró el nivel.');
+        }
+    }
+
+    function checkLevelCompletion() {
+        if (clicksCount >= clicksNeeded) {
+            endLevel(true);
+        }
+    }
+
+    function endLevel(success) {
+        clearInterval(timerInterval);
+        if (success) {
+            alert('¡Nivel completado exitosamente!');
+        } else {
+            alert('¡Tiempo agotado! Nivel no completado.');
+        }
+        window.location.href = 'index.html';
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            if (remainingTime > 0) {
+                remainingTime--;
+                document.getElementById('temporizador').textContent = remainingTime;
+            } else {
+                endLevel(false);
+            }
+        }, 1000);
+    }
 </script>
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
