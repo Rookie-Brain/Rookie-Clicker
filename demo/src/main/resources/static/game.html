@@ -152,7 +152,7 @@
         try {
             const response = await axios.post('http://localhost:8080/api/levels', level);
             console.log('Level created:', response.data);
-            loadLevels(); // Refrescar la lista de niveles
+            loadLevels();
         } catch (error) {
             console.error('Error creating level:', error);
             alert('Error al crear el nivel: ' + (error.response ? error.response.data : error.message));
