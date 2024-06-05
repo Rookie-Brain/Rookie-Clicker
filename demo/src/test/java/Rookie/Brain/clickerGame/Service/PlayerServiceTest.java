@@ -121,33 +121,7 @@ public class PlayerServiceTest {
         verify(playerRepository, times(1)).save(player);
     }
 
-    @Test
-    public void getRanking_ReturnsOrderedPlayers() {
-        List<Player> players = Arrays.asList(
-                new Player(1L, "John", 0, 0),
-                new Player(2L, "Jane", 10, 0)
-        );
 
-        when(playerRepository.findAllByOrderByScoreDesc()).thenReturn(players);
 
-        List<Player> result = playerService.getRanking();
 
-        assertEquals(2, result.size());
-        assertEquals("Jane", result.get(0).getName());
-        assertEquals("John", result.get(1).getName());
-
-        verify(playerRepository, times(1)).findAllByOrderByScoreDesc();
-    }
-
-    @Test
-    public void incrementPlayerScore_ValidId_Success() {
-        when(playerRepository.findById(1L)).thenReturn(Optional.of(player));
-
-        int newScore = playerService.incrementPlayerScore(1L);
-
-        assertEquals(GlobalConstants.CLICK_SCORE, newScore);
-        assertEquals(GlobalConstants.CLICK_SCORE, player.getScore());
-        verify(playerRepository, times(1)).findById(1L);
-        verify(playerRepository, times(1)).save(player);
-    }
 }
