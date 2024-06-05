@@ -196,6 +196,7 @@
                     }
                 });
                 console.log('Game started:', response.data);
+                localStorage.setItem('currentLevelId', levelId); // Guardar el ID del nivel en el almacenamiento local
                 window.location.href = 'clicker.html';
             } catch (error) {
                 console.error('Error starting game:', error);

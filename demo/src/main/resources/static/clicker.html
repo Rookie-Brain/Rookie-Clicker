@@ -45,75 +45,72 @@
     <p>2024 Rockie-Clicker. Equipo Gomita.</p>
 </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', async function() {
 
+    <script>
+       document.addEventListener('DOMContentLoaded', async function() {
+           const playerId = localStorage.getItem('currentPlayerId');
+           const levelId = localStorage.getItem('currentLevelId');
 
-    const playerId = 1;
+           if (!playerId || !levelId) {
+               window.location.href = 'index.html';
+               return;
+           }
 
-    if (playerId === 0) {
-        window.location.href = 'index.html';
-        return;
-    }
+           const clickerImage = document.getElementById('clicker-image');
 
-    const clickerImage = document.getElementById('clicker-image');
+           clickerImage.addEventListener('click', async (event) => {
+               event.preventDefault();
 
-    clickerImage.addEventListener('click', async (event) => {
-        event.preventDefault();
+               try {
+                   const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
+                   updateScore(response.data);
+               } catch (error) {
+                   console.error('Error al incrementar la puntuación:', error);
+               }
+           });
 
-        try {
-            const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
-            updateScore(response.data);
-        } catch (error) {
-            console.error('Error al incrementar la puntuación:', error);
-        }
-    });
+           await loadLevel(levelId);
+       });
 
-});
+       function updateScore(score) {
+           const scoreElement = document.getElementById('contClicks');
+           scoreElement.textContent = score;
+       }
 
-function updateScore(score) {
-    const scoreElement = document.getElementById('contClicks');
-    scoreElement.textContent = score;
-}
+       async function loadLevel(levelId) {
+           try {
+               const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
+               const level = response.data;
+               updateLevelData(level);
+           } catch (error) {
+               console.error('Error al cargar el nivel:', error);
+               alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
+           }
+       }
 
-    async function loadLevel(levelId) {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
-        const level = response.data;
-        updateLevelData(level);
-    } catch (error) {
-        console.error('Error al cargar el nivel:', error);
-        alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
-    }
-}
+       function updateLevelData(level) {
+           const vidasRestantesElement = document.getElementById('vidas-restantes');
+           const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+           const temporizadorElement = document.getElementById('temporizador');
 
-function updateLevelData(level) {
-    const vidasRestantesElement = document.getElementById('vidas-restantes');
-    const clicksNecesariosElement = document.getElementById('clicks-necesarios');
-    const temporizadorElement = document.getElementById('temporizador');
-
-    if (level) { // Verifica si el nivel no es undefined
-        vidasRestantesElement.textContent = level.lives;
-        clicksNecesariosElement.textContent = level.nextlevelscore;
-        temporizadorElement.textContent = level.seconds;
-    } else {
-        console.error('No se encontró el nivel.');
-    }
-}
-
-// Llama a loadLevel con el ID del nivel que deseas cargar
-document.addEventListener('DOMContentLoaded', async function() {
-    await loadLevel(1);
-});
-
-
-
-
-
-
-
-
-
+           if (level) {
+               vidasRestantesElement.textContent = level.lives;
+               clicksNecesariosElement.textContent = level.nextlevelscore;
+               temporizadorElement.textContent = level.seconds;
+           } else {
+               console.error('No se encontró el nivel.');
+           }
+       }
 </script>
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
