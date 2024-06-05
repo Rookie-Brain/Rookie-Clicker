@@ -3,66 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Test</title>
+    <title>Game Creation</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <header>
-    <a href="index.html" class="btn btn-light" id="back-button">Regresar</a>
+    <a href="index.html" class="btn btn-light" id="back-button">Back</a>
     <h1>Rockie-Clicker</h1>
 </header>
 
 <div class="container mt-5">
-    <h1>Game Test</h1>
+    <h1>Game Creation</h1>
     <div class="mb-3">
         <label for="nickname">Nickname:</label>
         <input type="text" id="nickname" class="form-control" placeholder="Enter your nickname">
     </div>
-    <button class="btn btn-primary mb-2" onclick="createUser()">Crear Usuario</button>
-    <div id="user-info" class="mt-3 d-none">
-        <h3>Información del Jugador:</h3>
-        <p>Nickname: <span id="user-nickname"></span></p>
-        <p>ID: <span id="user-id"></span></p>
-        <p>Score: <span id="user-score">0</span></p>
-        <p>Vidas: <span id="user-lives">2</span></p>
-    </div>
+    <button class="btn btn-primary mb-2" onclick="createUser()">Create Player</button>
+    <button class="btn btn-info mb-2" onclick="searchPlayer()">Search Player</button>
     <div id="lives" class="mb-3">Lives: <span id="lives-count">2</span></div>
     <button class="btn btn-success mb-2" onclick="modifyLives(1)">+1 Life</button>
     <button class="btn btn-danger mb-2" onclick="modifyLives(-1)">-1 Life</button>
+
+    <div id="user-info" class="mt-3 d-none">
+        <h3>Info del player:</h3>
+        <p>Nickname: <span id="user-nickname"></span></p>
+        <p>ID: <span id="user-id"></span></p>
+        <p>Score: <span id="user-score">0</span></p>
+        <p>lives: <span id="user-lives">2</span></p>
+    </div>
+
     <div id="levels" class="mt-3">
         <h3>Niveles:</h3>
         <table class="table">
             <thead>
             <tr>
-                <th>Nivel</th>
-                <th>Vidas</th>
-                <th>Score para pasar el nivel</th>
-                <th>Tiempo (segundos)</th>
-                <th>Acciones</th>
+                <th>level</th>
+                <th>Score for next level</th>
+                <th>Time(seconds)</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody id="levels-table">
             </tbody>
         </table>
-        <button class="btn btn-success" onclick="addLevel()">Añadir Nivel</button>
-        <button class="btn btn-danger" onclick="resetLevels()">Reiniciar Niveles</button>
+        <button class="btn btn-success" onclick="addLevel()">Add level</button>
     </div>
     <div class="mt-3">
-        <h3>Nombre del Nivel:</h3>
+        <h3>name level:</h3>
         <input type="text" id="level-name" class="form-control mb-2" placeholder="Enter level name">
     </div>
     <div class="mt-3">
-        <h3>Vidas del Nivel:</h3>
-        <input type="number" id="level-lives" class="form-control mb-2" placeholder="Enter level lives">
-    </div>
-    <div class="mt-3">
-        <h3>Score necesario para pasar el nivel:</h3>
+        <h3>Score for next level:</h3>
         <input type="number" id="level-score" class="form-control mb-2" placeholder="Enter score required to pass level">
     </div>
     <div class="mt-3">
-        <h3>Tiempo necesario para pasar el nivel (segundos):</h3>
+        <h3>time out:</h3>
         <input type="number" id="level-time" class="form-control mb-2" placeholder="Enter time required to pass level">
     </div>
 </div>
@@ -104,6 +101,34 @@
         }
     }
 
+    async function searchPlayer() {
+        const nickname = document.getElementById('nickname').value;
+        if (!nickname) {
+            alert('Por favor, ingresa un nickname.');
+            return;
+        }
+
+        try {
+            const response = await axios.get('http://localhost:8080/api/players');
+            const players = response.data;
+            const player = players.find(p => p.name.toLowerCase() === nickname.toLowerCase());
+
+            if (player) {
+                document.getElementById('user-nickname').innerText = player.name;
+                document.getElementById('user-id').innerText = player.id;
+                document.getElementById('user-lives').innerText = player.lives;
+                document.getElementById('user-info').classList.remove('d-none');
+                localStorage.setItem('currentPlayerId', player.id);
+                console.log('Player found:', player);
+            } else {
+                alert('Usuario no encontrado.');
+            }
+        } catch (error) {
+            console.error('Error al buscar el usuario:', error);
+            alert('Error al buscar el usuario: ' + (error.response ? error.response.data : error.message));
+        }
+    }
+
     async function loadLevels() {
         try {
             const response = await axios.get('http://localhost:8080/api/levels');
@@ -115,7 +140,6 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${level.name}</td>
-                    <td>${level.lives}</td>
                     <td>${level.nextlevelscore}</td>
                     <td>${level.seconds}</td>
                     <td>
@@ -133,18 +157,16 @@
 
     async function addLevel() {
         const name = document.getElementById('level-name').value;
-        const lives = document.getElementById('level-lives').value;
         const score = document.getElementById('level-score').value;
         const time = document.getElementById('level-time').value;
 
-        if (!name || !lives || !score || !time) {
+        if (!name || !score || !time) {
             alert('Por favor, completa todos los campos del nivel.');
             return;
         }
 
         const level = {
             name: name,
-            lives: parseInt(lives),
             nextlevelscore: parseInt(score),
             seconds: parseInt(time)
         };
@@ -172,7 +194,6 @@
 
     function resetLevels() {
         document.getElementById('level-name').value = '';
-        document.getElementById('level-lives').value = '';
         document.getElementById('level-score').value = '';
         document.getElementById('level-time').value = '';
     }
