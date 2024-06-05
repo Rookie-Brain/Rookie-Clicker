@@ -26,6 +26,7 @@
         <p>Nickname: <span id="user-nickname"></span></p>
         <p>ID: <span id="user-id"></span></p>
         <p>Score: <span id="user-score">0</span></p>
+        <p>Vidas: <span id="user-lives">2</span></p> <!-- Añadido -->
     </div>
     <div id="lives" class="mb-3">Lives: <span id="lives-count">2</span></div>
     <button class="btn btn-success mb-2" onclick="modifyLives(1)">+1 Life</button>
@@ -79,83 +80,85 @@
     });
 
     async function createUser() {
-    const nickname = document.getElementById('nickname').value;
-    if (!nickname) {
-        alert('Por favor, ingresa un nickname.');
-        return;
-    }
+        const nickname = document.getElementById('nickname').value;
+        if (!nickname) {
+            alert('Por favor, ingresa un nickname.');
+            return;
+        }
 
-    const player = { name: nickname };
+        const lives = parseInt(document.getElementById('lives-count').innerText); // Obtener la cantidad de vidas del usuario
+        const player = { name: nickname, lives: lives }; // Añadir la cantidad de vidas al jugador
 
-    try {
-        const response = await axios.post('http://localhost:8080/api/players', player);
-        const playerData = response.data;
-        document.getElementById('user-nickname').innerText = playerData.name;
-        document.getElementById('user-id').innerText = playerData.id;
-        document.getElementById('user-info').classList.remove('d-none');
-        localStorage.setItem('currentPlayerId', playerData.id); // Almacenar el playerId en el almacenamiento local
-        console.log('Player created:', playerData);
-        alert('Usuario creado exitosamente!');
-    } catch (error) {
-        console.error('Error creating player:', error);
-        alert('Error al crear el usuario: ' + (error.response ? error.response.data : error.message));
+        try {
+            const response = await axios.post('http://localhost:8080/api/players', player);
+            const playerData = response.data;
+            document.getElementById('user-nickname').innerText = playerData.name;
+            document.getElementById('user-id').innerText = playerData.id;
+            document.getElementById('user-lives').innerText = playerData.lives; // Mostrar vidas del usuario
+            document.getElementById('user-info').classList.remove('d-none');
+            localStorage.setItem('currentPlayerId', playerData.id); // Almacenar el playerId en el almacenamiento local
+            console.log('Player created:', playerData);
+            alert('Usuario creado exitosamente!');
+        } catch (error) {
+            console.error('Error creating player:', error);
+            alert('Error al crear el usuario: ' + (error.response ? error.response.data : error.message));
+        }
     }
-}
 
     async function loadLevels() {
-    try {
-        const response = await axios.get('http://localhost:8080/api/levels');
-        const levels = response.data;
-        const levelsTable = document.getElementById('levels-table');
-        levelsTable.innerHTML = ''; // Limpiar niveles anteriores
+        try {
+            const response = await axios.get('http://localhost:8080/api/levels');
+            const levels = response.data;
+            const levelsTable = document.getElementById('levels-table');
+            levelsTable.innerHTML = ''; // Limpiar niveles anteriores
 
-        levels.forEach(level => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${level.name}</td>
-                <td>${level.lives}</td>
-                <td>${level.nextlevelscore}</td> <!-- Corregir aquí -->
-                <td>${level.seconds}</td> <!-- Corregir aquí -->
-                <td>
-                    <button class="btn btn-primary" onclick="startGame(${level.id})">Iniciar Juego</button>
-                    <button class="btn btn-danger" onclick="deleteLevel(${level.id})">Eliminar</button>
-                </td>
-            `;
-            levelsTable.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error al cargar los niveles:', error);
-        alert('Error al cargar los niveles: ' + (error.response ? error.response.data : error.message));
+            levels.forEach(level => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${level.name}</td>
+                    <td>${level.lives}</td>
+                    <td>${level.nextlevelscore}</td>
+                    <td>${level.seconds}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="startGame(${level.id})">Iniciar Juego</button>
+                        <button class="btn btn-danger" onclick="deleteLevel(${level.id})">Eliminar</button>
+                    </td>
+                `;
+                levelsTable.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error al cargar los niveles:', error);
+            alert('Error al cargar los niveles: ' + (error.response ? error.response.data : error.message));
+        }
     }
-}
 
     async function addLevel() {
-    const name = document.getElementById('level-name').value;
-    const lives = document.getElementById('level-lives').value;
-    const score = document.getElementById('level-score').value;
-    const time = document.getElementById('level-time').value;
+        const name = document.getElementById('level-name').value;
+        const lives = document.getElementById('level-lives').value;
+        const score = document.getElementById('level-score').value;
+        const time = document.getElementById('level-time').value;
 
-    if (!name || !lives || !score || !time) {
-        alert('Por favor, completa todos los campos del nivel.');
-        return;
+        if (!name || !lives || !score || !time) {
+            alert('Por favor, completa todos los campos del nivel.');
+            return;
+        }
+
+        const level = {
+            name: name,
+            lives: parseInt(lives),
+            nextlevelscore: parseInt(score),
+            seconds: parseInt(time)
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/levels', level);
+            console.log('Level created:', response.data);
+            loadLevels(); // Refrescar la lista de niveles
+        } catch (error) {
+            console.error('Error creating level:', error);
+            alert('Error al crear el nivel: ' + (error.response ? error.response.data : error.message));
+        }
     }
-
-    const level = {
-        name: name,
-        lives: parseInt(lives),
-        nextlevelscore: parseInt(score), // Corregir aquí
-        seconds: parseInt(time) // Corregir aquí
-    };
-
-    try {
-        const response = await axios.post('http://localhost:8080/api/levels', level);
-        console.log('Level created:', response.data);
-        loadLevels(); // Refrescar la lista de niveles
-    } catch (error) {
-        console.error('Error creating level:', error);
-        alert('Error al crear el nivel: ' + (error.response ? error.response.data : error.message));
-    }
-}
 
     async function deleteLevel(levelId) {
         try {
@@ -181,29 +184,28 @@
         lives += change;
         livesCount.innerText = lives;
     }
-async function startGame(levelId) {
-    const playerName = document.getElementById('nickname').value; // Obtener el nombre del jugador del campo de entrada de texto
 
-    if (playerName) { // Verificar si se ingresó un nombre de jugador
-        try {
-            const response = await axios.post(`http://localhost:8080/api/games`, null, {
-                params: {
-                    playerName: playerName,
-                    levelId: levelId
-                }
-            });
-            console.log('Game started:', response.data);
-            window.location.href = 'clicker.html'; // Redirigir a la página del clicker
-        } catch (error) {
-            console.error('Error starting game:', error);
-            alert('Error al iniciar el juego: ' + (error.response ? error.response.data : error.message));
+    async function startGame(levelId) {
+        const playerName = document.getElementById('nickname').value; // Obtener el nombre del jugador del campo de entrada de texto
+
+        if (playerName) { // Verificar si se ingresó un nombre de jugador
+            try {
+                const response = await axios.post(`http://localhost:8080/api/games`, null, {
+                    params: {
+                        playerName: playerName,
+                        levelId: levelId
+                    }
+                });
+                console.log('Game started:', response.data);
+                window.location.href = 'clicker.html'; // Redirigir a la página del clicker
+            } catch (error) {
+                console.error('Error starting game:', error);
+                alert('Error al iniciar el juego: ' + (error.response ? error.response.data : error.message));
+            }
+        } else {
+            alert('Por favor, ingresa un nombre de jugador.');
         }
-    } else {
-        alert('Por favor, ingresa un nombre de jugador primero.'); // Mostrar una alerta si no se ingresó un nombre de jugador
     }
-}
-
-
 </script>
 </body>
 </html>

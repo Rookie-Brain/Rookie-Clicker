@@ -6,9 +6,9 @@
     <title>Ranking</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Importa la biblioteca Axios -->
+    <!-- Elimina la referencia si no existe ranking.js -->
+    <!-- <script src="js/ranking.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/ranking.js"></script>
 </head>
 <body>
 <header>
@@ -26,7 +26,7 @@
         </tr>
         </thead>
         <tbody id="ranking-table">
-        <!-- Los datos del ranking se cargarán aquí -->
+        <!-- Ranking datos aqui -->
         </tbody>
     </table>
 </div>
@@ -34,8 +34,6 @@
 <footer>
     <p>2024 Rockie-Clicker. Equipo Gomita.</p>
 </footer>
-
-<!-- Script inline para cargar y mostrar el ranking -->
 <script>
     document.addEventListener('DOMContentLoaded', async function() {
         try {
@@ -57,7 +55,7 @@
             row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${player.name}</td>
-                <td>${player.score}</td> <!-- Aquí se muestra el score -->
+                <td>${player.score}</td> <!-- Asegúrate de que el campo sea 'score' -->
             `;
             rankingTable.appendChild(row);
         });
