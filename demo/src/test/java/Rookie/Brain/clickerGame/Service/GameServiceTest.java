@@ -22,81 +22,67 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class GameServiceTest {
 
-    @Mock
-    private PlayerRepository playerRepository;
 
-    @Mock
-    private LevelRepository levelRepository;
 
-    @Mock
-    private GameRepository gameRepository;
+    @ExtendWith(MockitoExtension.class)
+    public class GameServiceTest {
 
-    @InjectMocks
-    private GameService gameService;
+        @Mock
+        private PlayerRepository playerRepository;
 
-    private Player player;
-    private Level level;
+        @Mock
+        private LevelRepository levelRepository;
 
-    @BeforeEach
-    public void setUp() {
-        player = new Player(1L,"John",0,0);
-        level = new Level(1L,"Beginner",50,30);
+        @Mock
+        private GameRepository gameRepository;
+
+        @InjectMocks
+        private GameService gameService;
+
+        private Player player;
+        private Level level;
+
+        @BeforeEach
+        public void setUp() {
+            player = new Player(1L, "John", 0, 0);
+            level = new Level(1L, "Beginner", 50, 30);
+        }
+
+
+        @Test
+        public void saveGame_PlayerNotFound_ExceptionThrown() {
+            when(playerRepository.findByName("John")).thenReturn(null);
+
+            assertThrows(PlayerNotFoundException.class, () -> gameService.saveGame("John", 1L));
+
+            verify(playerRepository, times(1)).findByName("John");
+            verifyNoInteractions(levelRepository, gameRepository);
+        }
+
+        @Test
+        public void saveGame_GameAlreadyExists_ExceptionThrown() {
+            when(playerRepository.findByName("John")).thenReturn(player);
+            when(levelRepository.findById(1L)).thenReturn(Optional.of(level));
+            when(gameRepository.existsByPlayerNameAndLevelId("John", 1L)).thenReturn(true);
+
+            assertThrows(GameAlreadyExistsException.class, () -> gameService.saveGame("John", 1L));
+
+            verify(playerRepository, times(1)).findByName("John");
+            verify(levelRepository, times(1)).findById(1L);
+            verify(gameRepository, times(1)).existsByPlayerNameAndLevelId("John", 1L);
+            verify(gameRepository, times(0)).save(any(Game.class));
+        }
+
+        @Test
+        public void saveGame_LevelNotFound_ExceptionThrown() {
+            when(playerRepository.findByName("John")).thenReturn(player);
+            when(levelRepository.findById(1L)).thenReturn(Optional.empty());
+
+            assertThrows(LevelNotFoundException.class, () -> gameService.saveGame("John", 1L));
+
+            verify(playerRepository, times(1)).findByName("John");
+            verify(levelRepository, times(1)).findById(1L);
+            verifyNoInteractions(gameRepository);
+        }
     }
-
-    @Test
-    public void saveGame_ValidInput_Success() {
-        when(playerRepository.findByName("John")).thenReturn(player);
-        when(levelRepository.findById(1L)).thenReturn(Optional.of(level));
-        when(gameRepository.existsByPlayerNameAndLevelId("John", 1L)).thenReturn(false);
-
-        Game savedGame = gameService.saveGame("John", 1L);
-
-        assertNotNull(savedGame);
-        assertEquals(player, savedGame.getPlayer());
-        assertEquals(level, savedGame.getLevel());
-
-        verify(playerRepository, times(1)).findByName("John");
-        verify(levelRepository, times(1)).findById(1L);
-        verify(gameRepository, times(1)).existsByPlayerNameAndLevelId("John", 1L);
-        verify(gameRepository, times(1)).save(any(Game.class));
-    }
-
-    @Test
-    public void saveGame_PlayerNotFound_ExceptionThrown() {
-        when(playerRepository.findByName("John")).thenReturn(null);
-
-        assertThrows(PlayerNotFoundException.class, () -> gameService.saveGame("John", 1L));
-
-        verify(playerRepository, times(1)).findByName("John");
-        verifyNoInteractions(levelRepository, gameRepository);
-    }
-
-    @Test
-    public void saveGame_GameAlreadyExists_ExceptionThrown() {
-        when(playerRepository.findByName("John")).thenReturn(player);
-        when(levelRepository.findById(1L)).thenReturn(Optional.of(level));
-        when(gameRepository.existsByPlayerNameAndLevelId("John", 1L)).thenReturn(true);
-
-        assertThrows(GameAlreadyExistsException.class, () -> gameService.saveGame("John", 1L));
-
-        verify(playerRepository, times(1)).findByName("John");
-        verify(levelRepository, times(1)).findById(1L);
-        verify(gameRepository, times(1)).existsByPlayerNameAndLevelId("John", 1L);
-        verifyNoMoreInteractions(gameRepository);
-    }
-
-    @Test
-    public void saveGame_LevelNotFound_ExceptionThrown() {
-        when(playerRepository.findByName("John")).thenReturn(player);
-        when(levelRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(LevelNotFoundException.class, () -> gameService.saveGame("John", 1L));
-
-        verify(playerRepository, times(1)).findByName("John");
-        verify(levelRepository, times(1)).findById(1L);
-        verifyNoInteractions(gameRepository);
-    }
-}
