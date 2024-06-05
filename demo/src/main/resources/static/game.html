@@ -26,7 +26,7 @@
         <p>Nickname: <span id="user-nickname"></span></p>
         <p>ID: <span id="user-id"></span></p>
         <p>Score: <span id="user-score">0</span></p>
-        <p>Vidas: <span id="user-lives">2</span></p> <!-- Añadido -->
+        <p>Vidas: <span id="user-lives">2</span></p>
     </div>
     <div id="lives" class="mb-3">Lives: <span id="lives-count">2</span></div>
     <button class="btn btn-success mb-2" onclick="modifyLives(1)">+1 Life</button>
@@ -44,7 +44,6 @@
             </tr>
             </thead>
             <tbody id="levels-table">
-            <!-- Niveles irán aquí -->
             </tbody>
         </table>
         <button class="btn btn-success" onclick="addLevel()">Añadir Nivel</button>
@@ -86,8 +85,8 @@
             return;
         }
 
-        const lives = parseInt(document.getElementById('lives-count').innerText); // Obtener la cantidad de vidas del usuario
-        const player = { name: nickname, lives: lives }; // Añadir la cantidad de vidas al jugador
+        const lives = parseInt(document.getElementById('lives-count').innerText);
+        const player = { name: nickname, lives: lives };
 
         try {
             const response = await axios.post('http://localhost:8080/api/players', player);
@@ -110,7 +109,7 @@
             const response = await axios.get('http://localhost:8080/api/levels');
             const levels = response.data;
             const levelsTable = document.getElementById('levels-table');
-            levelsTable.innerHTML = ''; // Limpiar niveles anteriores
+            levelsTable.innerHTML = '';
 
             levels.forEach(level => {
                 const row = document.createElement('tr');
@@ -186,9 +185,9 @@
     }
 
     async function startGame(levelId) {
-        const playerName = document.getElementById('nickname').value; // Obtener el nombre del jugador del campo de entrada de texto
+        const playerName = document.getElementById('nickname').value;
 
-        if (playerName) { // Verificar si se ingresó un nombre de jugador
+        if (playerName) {
             try {
                 const response = await axios.post(`http://localhost:8080/api/games`, null, {
                     params: {
@@ -197,7 +196,7 @@
                     }
                 });
                 console.log('Game started:', response.data);
-                window.location.href = 'clicker.html'; // Redirigir a la página del clicker
+                window.location.href = 'clicker.html';
             } catch (error) {
                 console.error('Error starting game:', error);
                 alert('Error al iniciar el juego: ' + (error.response ? error.response.data : error.message));

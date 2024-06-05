@@ -51,7 +51,7 @@
 
     const playerId = 1;
 
-    if (playerId === 0) { // Verifica si playerId es 0
+    if (playerId === 0) {
         window.location.href = 'index.html';
         return;
     }
@@ -95,16 +95,15 @@ function updateLevelData(level) {
     if (level) { // Verifica si el nivel no es undefined
         vidasRestantesElement.textContent = level.lives;
         clicksNecesariosElement.textContent = level.nextlevelscore;
-        temporizadorElement.textContent = level.seconds; // Suponiendo que el valor del temporizador está en la propiedad "seconds" del objeto level
+        temporizadorElement.textContent = level.seconds;
     } else {
         console.error('No se encontró el nivel.');
-        // Puedes manejar este caso según tus necesidades, por ejemplo, mostrando un mensaje de error o estableciendo los valores predeterminados.
     }
 }
 
 // Llama a loadLevel con el ID del nivel que deseas cargar
 document.addEventListener('DOMContentLoaded', async function() {
-    await loadLevel(1); // Carga el nivel con ID 1 al cargar la página
+    await loadLevel(1);
 });
 
 
