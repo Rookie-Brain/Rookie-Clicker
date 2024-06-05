@@ -43,7 +43,7 @@ public class GameServiceTest {
     @BeforeEach
     public void setUp() {
         player = new Player(1L,"John",0,0);
-        level = new Level(1L,"Beginner");
+        level = new Level(1L,"Beginner",50,30);
     }
 
     @Test

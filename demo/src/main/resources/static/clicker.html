@@ -47,71 +47,74 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', async function() {
-     // Recuperar el playerId del almacenamiento local
-     const playerId = localStorage.getItem('currentPlayerId');
 
-     if (!playerId) {
-         // Redirigir de vuelta a la página de creación de jugador si no se encuentra el playerId en el almacenamiento local
-         window.location.href = 'index.html';
-         return;
-     }
 
-     if (currentPlayerId) {
-         localStorage.setItem('currentPlayerId', currentPlayerId);
-         getPlayerStats(currentPlayerId);
-     } else {
-         window.location.href = 'game.html';
-     }
+    const playerId = 1;
 
-     const clickerImage = document.getElementById('clicker-image');
+    if (playerId === 0) { // Verifica si playerId es 0
+        window.location.href = 'index.html';
+        return;
+    }
 
-     clickerImage.addEventListener('click', async (event) => {
-         event.preventDefault();
+    const clickerImage = document.getElementById('clicker-image');
 
-         try {
-             const response = await axios.post(`/api/click/${currentPlayerId}`);
-             updateScore(response.data);
-         } catch (error) {
-             console.error('Error al incrementar la puntuación:', error);
-         }
-     });
- });
+    clickerImage.addEventListener('click', async (event) => {
+        event.preventDefault();
 
-         // Obtener las estadísticas del jugador y actualizar la interfaz de usuario
-         await getPlayerStats(playerId);
-     });
+        try {
+            const response = await axios.post(`http://localhost:8080/api/click/${playerId}`);
+            updateScore(response.data);
+        } catch (error) {
+            console.error('Error al incrementar la puntuación:', error);
+        }
+    });
 
-     // Función para obtener las estadísticas del jugador
-     async function getPlayerStats(playerId) {
-         try {
-             // Realizar una solicitud GET al endpoint /api/players/{id} para obtener las estadísticas del jugador
-             const response = await axios.get(`/api/players/${playerId}`);
-             // Actualizar las estadísticas en la interfaz de usuario
-             updatePlayerStats(response.data);
-         } catch (error) {
-             console.error('Error al obtener las estadísticas del jugador:', error);
-         }
-     }
+});
 
-     // Función para actualizar las estadísticas del jugador en la interfaz de usuario
-     function updatePlayerStats(playerStats) {
-         const { tiempo, clicks, vidasRestantes, clicksNecesarios } = playerStats;
-         const tiempoElement = document.getElementById('temporizador');
-         const clicksElement = document.getElementById('contClicks');
-         const vidasElement = document.getElementById('vidas-restantes');
-         const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+function updateScore(score) {
+    const scoreElement = document.getElementById('contClicks');
+    scoreElement.textContent = score;
+}
 
-         tiempoElement.textContent = tiempo;
-         clicksElement.textContent = clicks;
-         vidasElement.textContent = vidasRestantes;
-         clicksNecesariosElement.textContent = clicksNecesarios;
-     }
+    async function loadLevel(levelId) {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/levels/${levelId}`);
+        const level = response.data;
+        updateLevelData(level);
+    } catch (error) {
+        console.error('Error al cargar el nivel:', error);
+        alert('Error al cargar el nivel: ' + (error.response ? error.response.data : error.message));
+    }
+}
 
-     // Función para actualizar la puntuación en la interfaz de usuario
-     function updateScore(score) {
-         const scoreElement = document.getElementById('contClicks');
-         scoreElement.textContent = score;
-     }
+function updateLevelData(level) {
+    const vidasRestantesElement = document.getElementById('vidas-restantes');
+    const clicksNecesariosElement = document.getElementById('clicks-necesarios');
+    const temporizadorElement = document.getElementById('temporizador');
+
+    if (level) { // Verifica si el nivel no es undefined
+        vidasRestantesElement.textContent = level.lives;
+        clicksNecesariosElement.textContent = level.nextlevelscore;
+        temporizadorElement.textContent = level.seconds; // Suponiendo que el valor del temporizador está en la propiedad "seconds" del objeto level
+    } else {
+        console.error('No se encontró el nivel.');
+        // Puedes manejar este caso según tus necesidades, por ejemplo, mostrando un mensaje de error o estableciendo los valores predeterminados.
+    }
+}
+
+// Llama a loadLevel con el ID del nivel que deseas cargar
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadLevel(1); // Carga el nivel con ID 6 al cargar la página
+});
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>

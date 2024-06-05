@@ -1,14 +1,14 @@
 
-š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$258b007d-4a3b-4e68-9e91-aabcc17ece28
+š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$3b2dd521-a124-4445-868c-dfe78b5a83b0
 ~
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞJ$9f89b1cb-f186-4e6e-93ac-c2aefef602ab
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞJ$79ea229c-a1e7-4649-90cd-4ff12b1385fb
 {
-java:S1874"3Remove this use of "description"; it is deprecated.(•ĞØøÿÿÿÿ8ò¤‰šş1J$4691a538-6dcd-41f0-9c71-9c4bafef130d
+java:S1874"3Remove this use of "description"; it is deprecated.(•ĞØøÿÿÿÿ8ò¤‰šş1J$162d48c1-3010-40df-ad11-525b695f3adf
 b
-java:S1452"&Remove usage of generic wildcard type.(Î÷“èJ$c5a4e3e6-8982-4f9f-b700-5e1ec2674cb8
+java:S1452"&Remove usage of generic wildcard type.(Î÷“èJ$2d77ca36-96b6-487c-ac3f-55e7d1ff727d
 ‡
-java:S2147'"DCombine this catch with the one at line 37, which has the same body.(å²åŠ8ÏúşÂş1J$43fcda2b-bf5b-4368-92c4-d2cae2547959
+java:S2147'"DCombine this catch with the one at line 37, which has the same body.(å²åŠ8ÏúşÂş1J$6a204f4c-85da-4a30-968a-aef9a32a0266
 g
-java:S14520"&Remove usage of generic wildcard type.(ì®ÕäÿÿÿÿÿJ$e4d6cc34-dc0f-4da9-b0d7-88fa3c18a031
+java:S14520"&Remove usage of generic wildcard type.(ì®ÕäÿÿÿÿÿJ$f232c9b4-3a9f-40f3-8161-5a5477f56cee
 b
-java:S1452B"&Remove usage of generic wildcard type.(èá÷üJ$68588c69-22eb-4fdd-9169-e98403eb5f72
+java:S1452B"&Remove usage of generic wildcard type.(èá÷üJ$debd1088-0227-4ea1-9242-243d5256070c

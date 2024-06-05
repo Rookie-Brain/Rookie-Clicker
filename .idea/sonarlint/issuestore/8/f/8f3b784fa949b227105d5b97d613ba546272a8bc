@@ -1,10 +1,10 @@
 
-š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$1b40adda-ca02-4dc2-883c-e57ebefbc7fd
+š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$cf68f06a-c2b2-4ead-97c4-eac2809add5e
 ~
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞJ$4bae52fd-fb93-4a9d-a403-1856ce037423
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞJ$3dd696ea-a39e-4edc-9acf-46969f201996
 ~
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞJ$1b407aa4-1af0-4ded-b029-2fc693ae956d
-P
-java:S1874"3Remove this use of "description"; it is deprecated.(Õ”¸å8åƒ¹›þ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞJ$2d6ae7c9-9e8e-4c03-a3e9-213c6e5834db
+v
+java:S1874"3Remove this use of "description"; it is deprecated.(Õ”¸å8åƒ¹›þ1J$2bd741d2-40f7-4c9a-a7ef-a7063dc106d9
 |
-java:S4684"@Replace this persistent entity with a simple POJO or DTO object.(µ»Ä¤J$7e740f67-7b78-42b3-bbbe-2339e18d6c8f
+java:S4684"@Replace this persistent entity with a simple POJO or DTO object.(µ»Ä¤J$cf046f2c-b54b-4d37-8b48-8d2a100f6754

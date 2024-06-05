@@ -103,59 +103,59 @@
 }
 
     async function loadLevels() {
-        try {
-            const response = await axios.get('http://localhost:8080/api/levels');
-            const levels = response.data;
-            const levelsTable = document.getElementById('levels-table');
-            levelsTable.innerHTML = ''; // Clear previous levels
+    try {
+        const response = await axios.get('http://localhost:8080/api/levels');
+        const levels = response.data;
+        const levelsTable = document.getElementById('levels-table');
+        levelsTable.innerHTML = ''; // Limpiar niveles anteriores
 
-            levels.forEach(level => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${level.name}</td>
-                    <td>${level.lives}</td>
-                    <td>${level.score}</td>
-                    <td>${level.time}</td>
-                    <td>
-                        <button class="btn btn-primary" onclick="startGame(${level.id})">Iniciar Juego</button>
-                        <button class="btn btn-danger" onclick="deleteLevel(${level.id})">Eliminar</button>
-                    </td>
-                `;
-                levelsTable.appendChild(row);
-            });
-        } catch (error) {
-            console.error('Error loading levels:', error);
-            alert('Error al cargar los niveles: ' + (error.response ? error.response.data : error.message));
-        }
+        levels.forEach(level => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${level.name}</td>
+                <td>${level.lives}</td>
+                <td>${level.nextlevelscore}</td> <!-- Corregir aquí -->
+                <td>${level.seconds}</td> <!-- Corregir aquí -->
+                <td>
+                    <button class="btn btn-primary" onclick="startGame(${level.id})">Iniciar Juego</button>
+                    <button class="btn btn-danger" onclick="deleteLevel(${level.id})">Eliminar</button>
+                </td>
+            `;
+            levelsTable.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error al cargar los niveles:', error);
+        alert('Error al cargar los niveles: ' + (error.response ? error.response.data : error.message));
     }
+}
 
     async function addLevel() {
-        const name = document.getElementById('level-name').value;
-        const lives = document.getElementById('level-lives').value;
-        const score = document.getElementById('level-score').value;
-        const time = document.getElementById('level-time').value;
+    const name = document.getElementById('level-name').value;
+    const lives = document.getElementById('level-lives').value;
+    const score = document.getElementById('level-score').value;
+    const time = document.getElementById('level-time').value;
 
-        if (!name || !lives || !score || !time) {
-            alert('Por favor, completa todos los campos del nivel.');
-            return;
-        }
-
-        const level = {
-            name: name,
-            lives: parseInt(lives),
-            score: parseInt(score),
-            time: parseInt(time)
-        };
-
-        try {
-            const response = await axios.post('http://localhost:8080/api/levels', level);
-            console.log('Level created:', response.data);
-            loadLevels(); // Refresh the levels list
-        } catch (error) {
-            console.error('Error creating level:', error);
-            alert('Error al crear el nivel: ' + (error.response ? error.response.data : error.message));
-        }
+    if (!name || !lives || !score || !time) {
+        alert('Por favor, completa todos los campos del nivel.');
+        return;
     }
+
+    const level = {
+        name: name,
+        lives: parseInt(lives),
+        nextlevelscore: parseInt(score), // Corregir aquí
+        seconds: parseInt(time) // Corregir aquí
+    };
+
+    try {
+        const response = await axios.post('http://localhost:8080/api/levels', level);
+        console.log('Level created:', response.data);
+        loadLevels(); // Refrescar la lista de niveles
+    } catch (error) {
+        console.error('Error creating level:', error);
+        alert('Error al crear el nivel: ' + (error.response ? error.response.data : error.message));
+    }
+}
 
     async function deleteLevel(levelId) {
         try {

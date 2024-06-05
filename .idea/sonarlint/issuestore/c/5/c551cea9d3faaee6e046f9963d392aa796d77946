@@ -1,10 +1,10 @@
 
-š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$bc432702-4f37-4ebc-b6f6-85b3a2db86a0
+š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Âëÿ”ûÿÿÿÿJ$c32ca8dd-aa8e-4a4a-9568-3a328e772aba
 ~
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞJ$1ec7968e-1d60-453e-b8b0-0c2240d4c2ab
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞJ$87edbee8-1669-423f-ba23-b8ba6e17fcaa
 {
-java:S1874"3Remove this use of "description"; it is deprecated.(í™ªúÿÿÿÿ8ØÌíšş1J$23835872-9e43-47a9-94ea-2c01149c2db6
+java:S1874"3Remove this use of "description"; it is deprecated.(í™ªúÿÿÿÿ8ØÌíšş1J$3992e5de-d059-4f21-b05e-4738adb899c3
 ˆ
-java:S4684"@Replace this persistent entity with a simple POJO or DTO object.(³µêÎøÿÿÿÿ8ı­›ş1J$1b8cc2da-cb89-477b-9b26-8af5b9af6ece
+java:S4684"@Replace this persistent entity with a simple POJO or DTO object.(³µêÎøÿÿÿÿ8ı­›ş1J$761b70cc-9ed7-44fa-a170-7f14459a8e7f
 i
-java:S1452"&Remove usage of generic wildcard type.(ÅÉôÚ8ÅÀ­›ş1J$ac384634-3594-4204-aee0-64aa3e31c0a0
+java:S1452"&Remove usage of generic wildcard type.(ÅÉôÚ8ÅÀ­›ş1J$8fc00fc4-082b-4f2f-98cb-6bf275578fa1
